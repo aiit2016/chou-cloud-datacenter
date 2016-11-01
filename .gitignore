@@ -17,3 +17,8 @@ bin
 *.iml
 *.iws
 *.ipr
+
+# For Eclipse
+.project
+.classpath
+
