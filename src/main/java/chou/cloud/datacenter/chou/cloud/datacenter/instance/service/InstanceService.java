@@ -1,18 +1,21 @@
 package chou.cloud.datacenter.chou.cloud.datacenter.instance.service;
 
-import java.util.List;
-
+import chou.cloud.datacenter.chou.cloud.datacenter.instance.entity.Instance;
+import chou.cloud.datacenter.chou.cloud.datacenter.instance.repository.InstanceRepository;
+import chou.cloud.datacenter.chou.cloud.datacenter.machine.entity.Machine;
+import chou.cloud.datacenter.chou.cloud.datacenter.machine.service.MachineService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import chou.cloud.datacenter.chou.cloud.datacenter.instance.entity.Instance;
-import chou.cloud.datacenter.chou.cloud.datacenter.instance.repository.InstanceRepository;
+import java.util.List;
 
 @Service
 @Transactional
 public class InstanceService {
+	@Autowired
+	MachineService MachineService;
 
 	@Autowired
 	InstanceRepository instanceRepository;
@@ -31,5 +34,10 @@ public class InstanceService {
 
 	public Instance find(Long id) {
 		return instanceRepository.findOne(id);
+	}
+
+	public Machine getMachine(Instance instance) {
+		Long machineId = instance.getMachineId();
+		return MachineService.find(machineId);
 	}
 }
