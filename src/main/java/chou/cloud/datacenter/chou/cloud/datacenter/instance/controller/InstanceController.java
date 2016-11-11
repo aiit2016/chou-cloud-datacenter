@@ -61,4 +61,16 @@ public class InstanceController {
 		return instanceService.findByStatus(status);
 	}
 
+	@RequestMapping(value = "{id}/up", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	Instance upInstance(@PathVariable("id") Long id) {
+		return instanceService.upInstance(id);
+	}
+
+	@RequestMapping(value = "{id}/down", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	Instance downInstance(@PathVariable("id") Long id) {
+		return instanceService.downInstance(id);
+	}
+
 }
