@@ -1,4 +1,4 @@
-package chou.cloud.datacenter.chou.cloud.datacenter.vm;
+package chou.cloud.datacenter.vm.config;
 
 import org.springframework.context.annotation.Configuration;
 

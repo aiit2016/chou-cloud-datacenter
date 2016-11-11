@@ -1,4 +1,4 @@
-package chou.cloud.datacenter.chou.cloud.datacenter.instance.controller;
+package chou.cloud.datacenter.instance.controller;
 
 import java.util.List;
 import java.util.Map;
@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import chou.cloud.datacenter.chou.cloud.datacenter.instance.entity.Instance;
-import chou.cloud.datacenter.chou.cloud.datacenter.instance.service.InstanceService;
+import chou.cloud.datacenter.instance.entity.Instance;
+import chou.cloud.datacenter.instance.service.InstanceService;
 
 /**
  * Created by Koala Cheung on 2016/10/31.

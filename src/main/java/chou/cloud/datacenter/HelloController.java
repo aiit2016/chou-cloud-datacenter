@@ -1,4 +1,4 @@
-package chou.cloud.datacenter.chou.cloud.datacenter;
+package chou.cloud.datacenter;
 
 /**
  * Created by Koala Cheung on 2016/10/31.

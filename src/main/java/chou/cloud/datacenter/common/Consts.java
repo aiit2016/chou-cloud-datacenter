@@ -1,4 +1,4 @@
-package chou.cloud.datacenter.chou.cloud.datacenter.ctools;
+package chou.cloud.datacenter.common;
 
 public class Consts {
 

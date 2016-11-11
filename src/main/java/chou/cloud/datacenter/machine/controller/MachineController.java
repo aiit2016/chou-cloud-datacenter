@@ -1,4 +1,4 @@
-package chou.cloud.datacenter.chou.cloud.datacenter.machine.controller;
+package chou.cloud.datacenter.machine.controller;
 
 import java.util.List;
 
@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import chou.cloud.datacenter.chou.cloud.datacenter.machine.entity.Machine;
-import chou.cloud.datacenter.chou.cloud.datacenter.machine.service.MachineService;
+import chou.cloud.datacenter.machine.entity.Machine;
+import chou.cloud.datacenter.machine.service.MachineService;
 
 /**
  * Created by Koala Cheung on 2016/10/31.

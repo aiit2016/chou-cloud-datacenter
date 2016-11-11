@@ -1,4 +1,4 @@
-package chou.cloud.datacenter.chou.cloud.datacenter.machine.entity;
+package chou.cloud.datacenter.instance.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,7 +14,7 @@ import lombok.Data;
  */
 @Entity
 @Data
-public class Machine {
+public class Instance {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
@@ -24,12 +24,15 @@ public class Machine {
     private String name;
 
     @NotNull
-    @Size(min = 1, max = 16)
-    private String ipAddress;
+    private Long machineId;
 
     @NotNull
     private Integer cpuSize;
 
     @NotNull
     private Integer memorySize;
+
+    @NotNull
+    @Size(min = 1, max = 16)
+    private String status;
 }
