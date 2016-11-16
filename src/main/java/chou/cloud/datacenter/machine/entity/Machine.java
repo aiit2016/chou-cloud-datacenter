@@ -1,4 +1,4 @@
-package chou.cloud.datacenter.chou.cloud.datacenter.machine.entity;
+package chou.cloud.datacenter.machine.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

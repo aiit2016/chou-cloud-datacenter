@@ -1,4 +1,4 @@
-package chou.cloud.datacenter.chou.cloud.datacenter.machine.service;
+package chou.cloud.datacenter.machine.service;
 
 import java.util.List;
 
@@ -7,8 +7,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import chou.cloud.datacenter.chou.cloud.datacenter.machine.entity.Machine;
-import chou.cloud.datacenter.chou.cloud.datacenter.machine.repository.MachineRepository;
+import chou.cloud.datacenter.machine.entity.Machine;
+import chou.cloud.datacenter.machine.repository.MachineRepository;
 
 @Service
 @Transactional

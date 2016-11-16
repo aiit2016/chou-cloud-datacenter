@@ -1,4 +1,4 @@
-package chou.cloud.datacenter.chou.cloud.datacenter.instance.entity;
+package chou.cloud.datacenter.instance.entity;
 
 import lombok.Data;
 

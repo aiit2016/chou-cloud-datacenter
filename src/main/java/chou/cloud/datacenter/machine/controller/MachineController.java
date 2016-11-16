@@ -1,19 +1,11 @@
-package chou.cloud.datacenter.chou.cloud.datacenter.machine.controller;
+package chou.cloud.datacenter.machine.controller;
 
-import java.util.List;
-
+import chou.cloud.datacenter.machine.entity.Machine;
+import chou.cloud.datacenter.machine.service.MachineService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
-
-import chou.cloud.datacenter.chou.cloud.datacenter.machine.entity.Machine;
-import chou.cloud.datacenter.chou.cloud.datacenter.machine.service.MachineService;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Created by Koala Cheung on 2016/10/31.
