@@ -1,22 +1,14 @@
 package chou.cloud.datacenter.instance.controller;
 
-import chou.cloud.datacenter.chou.cloud.datacenter.instance.service.InstanceService;
+import chou.cloud.datacenter.instance.entity.Instance;
+import chou.cloud.datacenter.instance.service.InstanceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
-
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
-
-import chou.cloud.datacenter.instance.entity.Instance;
 
 /**
  * Created by Koala Cheung on 2016/10/31.
@@ -57,7 +49,7 @@ public class InstanceController {
 	}
 
 	@RequestMapping(value = "search", method = RequestMethod.GET)
-	List<Instance>  getInstances(@RequestParam Map<String,String> requestParams) {
+	List<Instance> getInstances(@RequestParam Map<String, String> requestParams) {
 		String status = requestParams.get("status");
 		return instanceService.findByStatus(status);
 	}
@@ -72,6 +64,18 @@ public class InstanceController {
 	@ResponseStatus(HttpStatus.OK)
 	Instance downInstance(@PathVariable("id") Long id) {
 		return instanceService.downInstance(id);
+	}
+
+	@RequestMapping(value = "{id}/asup", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	List<Instance> asupInstance(@PathVariable("id") Long id) {
+		return instanceService.asupInstance(id, 5);
+	}
+
+	@RequestMapping(value = "{id}/asdown", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	List<Instance> asdownInstance(@PathVariable("id") Long id) {
+		return instanceService.asdownInstance(id);
 	}
 
 }
