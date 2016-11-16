@@ -56,7 +56,7 @@ public class InstanceController {
 	}
 
 	@RequestMapping(value = "search", method = RequestMethod.GET)
-	List<Instance>  getInstances(@RequestParam Map<String,String> requestParams) {
+	List<Instance> getInstances(@RequestParam Map<String, String> requestParams) {
 		String status = requestParams.get("status");
 		return instanceService.findByStatus(status);
 	}
@@ -71,6 +71,18 @@ public class InstanceController {
 	@ResponseStatus(HttpStatus.OK)
 	Instance downInstance(@PathVariable("id") Long id) {
 		return instanceService.downInstance(id);
+	}
+
+	@RequestMapping(value = "{id}/asup", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	List<Instance> asupInstance(@PathVariable("id") Long id) {
+		return instanceService.asupInstance(id, 5);
+	}
+
+	@RequestMapping(value = "{id}/asdown", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.OK)
+	List<Instance> asdownInstance(@PathVariable("id") Long id) {
+		return instanceService.asdownInstance(id);
 	}
 
 }

@@ -10,4 +10,6 @@ public interface InstanceRepository extends JpaRepository<Instance, Long> {
 
 	List<Instance> findByStatus(String status);
 
+	List<Instance> findByName(String name);
+
 }
