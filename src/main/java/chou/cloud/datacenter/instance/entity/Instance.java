@@ -23,7 +23,6 @@ public class Instance {
     @Size(min = 1, max = 255)
     private String name;
 
-    @NotNull
     private Long machineId;
 
     @NotNull
@@ -32,7 +31,6 @@ public class Instance {
     @NotNull
     private Integer memorySize;
 
-    @NotNull
     @Size(min = 1, max = 16)
     private String status;
 }
