@@ -2,6 +2,7 @@ package chou.cloud.datacenter.instance.controller;
 
 import chou.cloud.datacenter.instance.entity.Instance;
 import chou.cloud.datacenter.instance.service.InstanceService;
+import chou.cloud.datacenter.machine.service.MachineService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
@@ -19,6 +20,9 @@ public class InstanceController {
 	@Autowired
 	InstanceService instanceService;
 
+	@Autowired
+	MachineService machineService;
+
 	@RequestMapping(method = RequestMethod.GET)
 	List<Instance> getInstances() {
 		return instanceService.findAll();
@@ -27,6 +31,7 @@ public class InstanceController {
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.CREATED)
 	Instance insertInstance(@Validated @RequestBody Instance instance) {
+		machineService.startCreatingInstance(instance);
 		return instanceService.save(instance);
 	}
 
