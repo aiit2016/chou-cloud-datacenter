@@ -1,21 +1,24 @@
 package chou.cloud.datacenter.instance.service;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import chou.cloud.datacenter.common.Consts;
+import chou.cloud.datacenter.instance.entity.Instance;
+import chou.cloud.datacenter.instance.repository.InstanceRepository;
+import chou.cloud.datacenter.machine.entity.Machine;
+import chou.cloud.datacenter.machine.service.MachineService;
+import chou.cloud.datacenter.vm.service.VirtualMachineService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import chou.cloud.datacenter.common.Consts;
-import chou.cloud.datacenter.instance.entity.Instance;
-import chou.cloud.datacenter.instance.repository.InstanceRepository;
-import chou.cloud.datacenter.vm.service.VirtualMachineService;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Transactional
 public class InstanceService {
+	@Autowired
+	MachineService machineService;
 
 	@Autowired
 	InstanceRepository instanceRepository;
@@ -37,6 +40,11 @@ public class InstanceService {
 
 	public Instance find(Long id) {
 		return instanceRepository.findOne(id);
+	}
+
+	public Machine getMachine(Instance instance) {
+		Long machineId = instance.getMachineId();
+		return machineService.find(machineId);
 	}
 
 	public List<Instance> findByStatus(String status) {
@@ -104,5 +112,4 @@ public class InstanceService {
 
 		return instances;
 	}
-
 }
