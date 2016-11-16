@@ -4,11 +4,13 @@ import chou.cloud.datacenter.instance.entity.Instance;
 import chou.cloud.datacenter.instance.repository.InstanceRepository;
 import chou.cloud.datacenter.machine.entity.Machine;
 import chou.cloud.datacenter.machine.repository.MachineRepository;
+import chou.cloud.datacenter.utils.CommandExecuter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -56,6 +58,13 @@ public class MachineService {
 		newInstance.setMachineId(appropriateMachine.getId());
 
 		//TODO: callCreateShell by other shell
+		CommandExecuter executer = new CommandExecuter(null);
+		List<String> commandList = new ArrayList<>();
+		for(String command: new String[] {"ls", "ls -l"}) {
+			commandList.add(command);
+		}
+
+		executer.exeCommands(commandList);
 		return newInstance;
 	}
 

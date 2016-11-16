@@ -1,15 +1,15 @@
 package chou.cloud.datacenter.utils;
 
-import java.io.InputStream;
-import java.util.Hashtable;
-
+import com.jcraft.jsch.ChannelExec;
+import com.jcraft.jsch.JSch;
+import com.jcraft.jsch.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 
-import com.jcraft.jsch.ChannelExec;
-import com.jcraft.jsch.JSch;
-import com.jcraft.jsch.Session;
+import java.io.InputStream;
+import java.util.Hashtable;
+import java.util.List;
 
 public class CommandExecuter {
 
@@ -38,6 +38,16 @@ public class CommandExecuter {
 			;
 		}
 	}
+
+	public int exeCommands(List<String> commands) {
+		for(String command: commands) {
+			int status = exeCommand(command);
+			if (status != 0) {
+				return status;
+			}
+		}
+	}
+
 
 	public int exeCommand(String command) {
 		int status = -1;
