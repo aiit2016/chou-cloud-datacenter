@@ -20,8 +20,8 @@ spring:
       enabled: true
       path: /h2-console/
 logging:
-    level: 
-        chou.cloud.datacenter: DEBUG
+  level: 
+    chou.cloud.datacenter: DEBUG
 
 ---
 
@@ -35,5 +35,10 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+logging:
+  path:
+    /myapp
+  level: 
+    chou.cloud.datacenter: DEBUG
 
 

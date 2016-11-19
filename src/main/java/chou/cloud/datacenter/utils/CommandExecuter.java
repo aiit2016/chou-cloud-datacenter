@@ -46,10 +46,12 @@ public class CommandExecuter {
 				break;
 			}
 		}
-		return true;
+		return status;
 	}
 
 	public boolean exeCommand(String command) {
+		logger.debug("execute command: " + command);
+
 		boolean status = false;
 
 		try {
@@ -89,7 +91,6 @@ public class CommandExecuter {
 				} catch (Exception ee) {
 				}
 			}
-			logger.debug("exit-status: " + channel.getExitStatus());
 			status = channel.getExitStatus() == 0;
 			channel.disconnect();
 			session.disconnect();
@@ -97,6 +98,7 @@ public class CommandExecuter {
 			logger.error("Command execute error!(command=" + command + ")", ex);
 		}
 
+		logger.debug("exit status: " + status);
 		return status;
 	}
 

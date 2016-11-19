@@ -35,8 +35,13 @@ public class VirtualMachineRealService {
 			instance.setStatus(Consts.INSTANCE_STATUS_INVALID);
 			instance.setDescription("No available resource!");
 			instanceRepository.save(instance);
+
+			logger.error("No available resource to start virtual machine!");
 			return;
 		}
+
+		instance.setMachineId(machine.getId());
+		instanceRepository.save(instance);
 
 		// start VM
 		SshServerInfo ssi = new SshServerInfo();
@@ -49,12 +54,15 @@ public class VirtualMachineRealService {
 		if (!status) {
 			instance.setStatus(Consts.INSTANCE_STATUS_INVALID);
 			instance.setDescription("Failured to start virtual machine!");
+			instanceRepository.save(instance);
+
+			logger.error("Failured to start virtual machine!");
 		} else {
 			instance.setStatus(Consts.INSTANCE_STATUS_ACTIVED);
-		}
-		instanceRepository.save(instance);
+			instanceRepository.save(instance);
 
-		logger.debug("Virtual machine is started. (instance.name=" + instance.getName() + ")");
+			logger.debug("Virtual machine is started.");
+		}
 	}
 
 	public void stop(Instance instance) {
@@ -73,15 +81,15 @@ public class VirtualMachineRealService {
 		if (!status) {
 			instance.setStatus(Consts.INSTANCE_STATUS_INVALID);
 			instance.setDescription("Failured to stop virtual machine!");
+			instanceRepository.save(instance);
+
+			logger.error("Failured to stop virtual machine!");
 		} else {
 			instance.setStatus(Consts.INSTANCE_STATUS_INACTIVED);
+			instanceRepository.save(instance);
+
+			logger.debug("Virtual machine is stopped.");
 		}
-		instanceRepository.save(instance);
-
-		instance.setStatus(Consts.INSTANCE_STATUS_INACTIVED);
-		instanceRepository.save(instance);
-
-		logger.debug("Virtual machine is stopped. (instance.name=" + instance.getName() + ")");
 	}
 
 }

@@ -9,14 +9,14 @@ public class CommandBuilder {
 
 	public static List<String> buildStartVmCommands(Instance instance) {
 		List<String> commands = new ArrayList<String>();
-		String command = "";
+		String command = "ls";
 		commands.add(command);
 		return commands;
 	}
 
 	public static List<String> buildStopVmCommands(Instance instance) {
 		List<String> commands = new ArrayList<String>();
-		String command = "";
+		String command = "ls";
 		commands.add(command);
 		return commands;
 	}

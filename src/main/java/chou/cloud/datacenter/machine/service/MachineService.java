@@ -7,6 +7,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import chou.cloud.datacenter.common.Consts;
 import chou.cloud.datacenter.instance.entity.Instance;
 import chou.cloud.datacenter.instance.repository.InstanceRepository;
 import chou.cloud.datacenter.machine.entity.Machine;
@@ -46,8 +47,10 @@ public class MachineService {
 			int usingMemory = 0;
 
 			for (Instance instance : instances) {
-				usingCpu += instance.getCpuSize();
-				usingMemory += instance.getMemorySize();
+				if (!Consts.INSTANCE_STATUS_INVALID.equals(instance.getStatus())) {
+					usingCpu += instance.getCpuSize();
+					usingMemory += instance.getMemorySize();
+				}
 			}
 
 			long cpuRoom = machine.getCpuSize() - usingCpu - newInstance.getCpuSize();

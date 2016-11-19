@@ -2,6 +2,9 @@ package chou.cloud.datacenter.vm.config;
 
 import static reactor.bus.selector.Selectors.$;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +19,7 @@ import reactor.fn.Consumer;
 
 @Component
 public class EventConfiguration {
+	private ExecutorService executor = Executors.newCachedThreadPool();
 
 	@Autowired
 	private EventBus r;
@@ -30,11 +34,23 @@ public class EventConfiguration {
 	}
 
 	private Consumer<Event<Instance>> startVirtualMachine() {
-		return event -> virtualMachineRealService.start(event.getData());
+//		return event -> virtualMachineRealService.start(event.getData());
+		return event -> executor.execute(new Runnable() {
+			@Override
+			public void run() {
+				virtualMachineRealService.start(event.getData());
+			}
+		});
 	}
 
 	private Consumer<Event<Instance>> stopVirtualMachine() {
-		return event -> virtualMachineRealService.stop(event.getData());
+//		return event -> virtualMachineRealService.stop(event.getData());
+		return event -> executor.execute(new Runnable() {
+			@Override
+			public void run() {
+				virtualMachineRealService.stop(event.getData());
+			}
+		});
 	}
 
 }

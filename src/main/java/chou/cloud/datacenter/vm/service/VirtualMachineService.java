@@ -20,12 +20,18 @@ public class VirtualMachineService {
 
 	public void start(Instance instance) {
 		logger.debug("Fire event EVENT_TYPE_STARTVM. (instance.name=" + instance.getName() + ")");
+
 		r.notify(Consts.EVENT_TYPE_STARTVM, Event.wrap(instance));
+
+		logger.debug("Event fired.");
 	}
 
 	public void stop(Instance instance) {
 		logger.debug("Fire event EVENT_TYPE_STOPVM. (instance.name=" + instance.getName() + ")");
+
 		r.notify(Consts.EVENT_TYPE_STOPVM, Event.wrap(instance));
+
+		logger.debug("Event fired.");
 	}
 
 }
