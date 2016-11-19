@@ -1,19 +1,16 @@
 package chou.cloud.datacenter.machine.service;
 
-import chou.cloud.datacenter.instance.entity.Instance;
-import chou.cloud.datacenter.instance.repository.InstanceRepository;
-import chou.cloud.datacenter.machine.entity.Machine;
-import chou.cloud.datacenter.machine.repository.MachineRepository;
-import chou.cloud.datacenter.utils.CommandExecuter;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import chou.cloud.datacenter.instance.entity.Instance;
+import chou.cloud.datacenter.instance.repository.InstanceRepository;
+import chou.cloud.datacenter.machine.entity.Machine;
+import chou.cloud.datacenter.machine.repository.MachineRepository;
 
 @Service
 @Transactional
@@ -41,57 +38,26 @@ public class MachineService {
 		return machineRepository.findOne(id);
 	}
 
-	public Instance startCreatingInstance(Instance newInstance) {
-		long maxScore = 0;
-		Machine appropriateMachine = null;
-		for(Map.Entry<Machine, Long> entry: getAvailableMachineWithScore(newInstance).entrySet()) {
-			long score = entry.getValue();
-			if (maxScore < score) {
-				appropriateMachine = entry.getKey();
-				maxScore = score;
-			}
-		}
-
-		if (appropriateMachine == null) {
-			return null;
-		}
-		newInstance.setMachineId(appropriateMachine.getId());
-
-		//TODO: callCreateShell by other shell
-		CommandExecuter executer = new CommandExecuter(null);
-		List<String> commandList = new ArrayList<>();
-		for(String command: new String[] {"ls", "ls -l"}) {
-			commandList.add(command);
-		}
-
-		executer.exeCommands(commandList);
-		return newInstance;
-	}
-
-	private Map<Machine, Long> getAvailableMachineWithScore(Instance newInstance) {
-		List<Instance> instances = instanceRepository.findAll();
-		Map<Machine, Long> availableMachines = new HashMap<Machine, Long>();
-
-		for (Machine machine: machineRepository.findAll()) {
+	public Machine getAvailableMachine(Instance newInstance) {
+		Machine availableMachine = null;
+		for (Machine machine : machineRepository.findAll()) {
+			List<Instance> instances = instanceRepository.findByMachineId(machine.getId());
 			int usingCpu = 0;
 			int usingMemory = 0;
 
-			for (Instance instance: instances) {
-				if (instance.getMachineId().longValue() == machine.getId().longValue()) {
-					usingCpu += instance.getCpuSize();
-					usingMemory += instance.getMemorySize();
-				}
+			for (Instance instance : instances) {
+				usingCpu += instance.getCpuSize();
+				usingMemory += instance.getMemorySize();
 			}
 
 			long cpuRoom = machine.getCpuSize() - usingCpu - newInstance.getCpuSize();
 			long memoryRoom = machine.getMemorySize() - usingMemory - newInstance.getMemorySize();
-			if (cpuRoom <= 0 || memoryRoom <= 0){
-				continue;
+			if (cpuRoom >= 0 && memoryRoom >= 0) {
+				availableMachine = machine;
+				break;
 			}
-
-			availableMachines.put(machine, cpuRoom * cpuRoom + memoryRoom * memoryRoom);
 		}
 
-		return availableMachines;
+		return availableMachine;
 	}
 }

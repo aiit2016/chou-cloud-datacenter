@@ -1,15 +1,16 @@
 package chou.cloud.datacenter.utils;
 
-import com.jcraft.jsch.ChannelExec;
-import com.jcraft.jsch.JSch;
-import com.jcraft.jsch.Session;
+import java.io.InputStream;
+import java.util.Hashtable;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 
-import java.io.InputStream;
-import java.util.Hashtable;
-import java.util.List;
+import com.jcraft.jsch.ChannelExec;
+import com.jcraft.jsch.JSch;
+import com.jcraft.jsch.Session;
 
 public class CommandExecuter {
 
@@ -24,33 +25,32 @@ public class CommandExecuter {
 			ssi = new SshServerInfo();
 		}
 		if (StringUtils.isEmpty(ssi.getUserName())) {
-			ssi.setUserName("");
+			ssi.setUserName("admin");
 		}
 		if (StringUtils.isEmpty(ssi.getPassword())) {
-			ssi.setPassword("");
+			ssi.setPassword("net03.password");
 		}
 		if (ssi.getPort() == null) {
 			ssi.setPort(22);
-			;
 		}
 		if (StringUtils.isEmpty(ssi.getChannelType())) {
 			ssi.setChannelType("exec");
-			;
 		}
 	}
 
-	public int exeCommands(List<String> commands) {
-		for(String command: commands) {
-			int status = exeCommand(command);
-			if (status != 0) {
-				return status;
+	public boolean exeCommands(List<String> commands) {
+		boolean status = false;
+		for (String command : commands) {
+			status = exeCommand(command);
+			if (!status) {
+				break;
 			}
 		}
+		return true;
 	}
 
-
-	public int exeCommand(String command) {
-		int status = -1;
+	public boolean exeCommand(String command) {
+		boolean status = false;
 
 		try {
 			Hashtable<String, String> config = new Hashtable<String, String>();
@@ -82,7 +82,6 @@ public class CommandExecuter {
 					logger.debug(new String(tmp, 0, i));
 				}
 				if (channel.isClosed()) {
-					logger.debug("exit-status: " + channel.getExitStatus());
 					break;
 				}
 				try {
@@ -90,7 +89,8 @@ public class CommandExecuter {
 				} catch (Exception ee) {
 				}
 			}
-			status = channel.getExitStatus();
+			logger.debug("exit-status: " + channel.getExitStatus());
+			status = channel.getExitStatus() == 0;
 			channel.disconnect();
 			session.disconnect();
 		} catch (Exception ex) {

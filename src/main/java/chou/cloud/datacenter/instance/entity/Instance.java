@@ -33,4 +33,7 @@ public class Instance {
 
     @Size(min = 1, max = 16)
     private String status;
+
+    @Size(min = 1, max = 255)
+    private String description;
 }

@@ -1,12 +1,20 @@
 package chou.cloud.datacenter.vm.service;
 
-import chou.cloud.datacenter.common.Consts;
-import chou.cloud.datacenter.instance.entity.Instance;
-import chou.cloud.datacenter.instance.repository.InstanceRepository;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import chou.cloud.datacenter.common.Consts;
+import chou.cloud.datacenter.instance.entity.Instance;
+import chou.cloud.datacenter.instance.repository.InstanceRepository;
+import chou.cloud.datacenter.machine.entity.Machine;
+import chou.cloud.datacenter.machine.service.MachineService;
+import chou.cloud.datacenter.utils.CommandBuilder;
+import chou.cloud.datacenter.utils.CommandExecuter;
+import chou.cloud.datacenter.utils.SshServerInfo;
 
 @Component
 public class VirtualMachineRealService {
@@ -16,74 +24,64 @@ public class VirtualMachineRealService {
 	@Autowired
 	InstanceRepository instanceRepository;
 
+	@Autowired
+	MachineService machineService;
+
 	public void start(Instance instance) {
-		// TODO: start virtual machine
 		logger.debug("Deal with event EVENT_TYPE_STARTVM. (instance.name=" + instance.getName() + ")");
 
-		try {
-			Thread.currentThread().sleep(5 * 1000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		Machine machine = machineService.getAvailableMachine(instance);
+		if (machine == null) {
+			instance.setStatus(Consts.INSTANCE_STATUS_INVALID);
+			instance.setDescription("No available resource!");
+			instanceRepository.save(instance);
+			return;
 		}
 
-		logger.debug("Virtual machine is started. (instance.name=" + instance.getName() + ")");
+		// start VM
+		SshServerInfo ssi = new SshServerInfo();
+		ssi.setHostName(machine.getIpAddress());
+		CommandExecuter ce = new CommandExecuter(ssi);
+		List<String> commands = CommandBuilder.buildStartVmCommands(instance);
+		boolean status = ce.exeCommands(commands);
 
-		instance.setStatus(Consts.INSTANCE_STATUS_ACTIVED);
+		// update status
+		if (!status) {
+			instance.setStatus(Consts.INSTANCE_STATUS_INVALID);
+			instance.setDescription("Failured to start virtual machine!");
+		} else {
+			instance.setStatus(Consts.INSTANCE_STATUS_ACTIVED);
+		}
 		instanceRepository.save(instance);
+
+		logger.debug("Virtual machine is started. (instance.name=" + instance.getName() + ")");
 	}
 
 	public void stop(Instance instance) {
-		// TODO: stop virtual machine
 		logger.debug("Deal with event EVENT_TYPE_STOPVM. (instance.name=" + instance.getName() + ")");
 
-		try {
-			// Replace userName, password and host with your specific values
-			String userName = "aUserName";
-			String password = "password";
-			String host = "hostName";
-			String path = "/";
-/*
-			Connection connection = new Connection(host);
-			connection.connect();
-			connection.authenticateWithPassword(userName, password);
-			String command = "ls -la " + path;
-			List<String> result = new LinkedList<>();
-			Session session = null;
+		Machine machine = machineService.find(instance.getMachineId());
 
-			try {
-				session = connection.openSession();
-				session.execCommand(command);
-				InputStream stdout = new StreamGobbler(session.getStdout());
+		// stop VM
+		SshServerInfo ssi = new SshServerInfo();
+		ssi.setHostName(machine.getIpAddress());
+		CommandExecuter ce = new CommandExecuter(ssi);
+		List<String> commands = CommandBuilder.buildStopVmCommands(instance);
+		boolean status = ce.exeCommands(commands);
 
-				try (BufferedReader br = new BufferedReader(new InputStreamReader(stdout))) {
-					String line = br.readLine();
-					while (line != null) {
-						result.add(line);
-						line = br.readLine();
-					}
-				}
-			} finally {
-				if (session != null) {
-					session.close();
-				}
-			}
-
-
-			for (String s: actual) {
-				System.out.println(s);
-			}
-			*/
-			Thread.currentThread().sleep(5 * 1000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		// update status
+		if (!status) {
+			instance.setStatus(Consts.INSTANCE_STATUS_INVALID);
+			instance.setDescription("Failured to stop virtual machine!");
+		} else {
+			instance.setStatus(Consts.INSTANCE_STATUS_INACTIVED);
 		}
-
-		logger.debug("Virtual machine is stopped. (instance.name=" + instance.getName() + ")");
+		instanceRepository.save(instance);
 
 		instance.setStatus(Consts.INSTANCE_STATUS_INACTIVED);
 		instanceRepository.save(instance);
+
+		logger.debug("Virtual machine is stopped. (instance.name=" + instance.getName() + ")");
 	}
 
 }

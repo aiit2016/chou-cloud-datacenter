@@ -12,4 +12,6 @@ public interface InstanceRepository extends JpaRepository<Instance, Long> {
 
 	List<Instance> findByName(String name);
 
+	List<Instance> findByMachineId(Long machineId);
+
 }

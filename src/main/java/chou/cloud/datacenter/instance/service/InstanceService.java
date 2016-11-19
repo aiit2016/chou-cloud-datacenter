@@ -26,6 +26,8 @@ public class InstanceService {
 	@Autowired
 	VirtualMachineService virtualMachineService;
 
+	/////////////////////////////////////////////////////////////////////////////////
+	// instance CRUD method
 	public List<Instance> findAll() {
 		return instanceRepository.findAll(new Sort(Sort.Direction.ASC, "id"));
 	}
@@ -53,6 +55,18 @@ public class InstanceService {
 
 	public List<Instance> findByName(String name) {
 		return instanceRepository.findByName(name);
+	}
+
+	/////////////////////////////////////////////////////////////////////////////////
+	// instance operation method
+	public Instance createInstance(Instance instance) {
+		// create instance record
+		instance.setId(null);
+		Instance retInstance = instanceRepository.save(instance);
+
+		// start instance
+		upInstance(retInstance.getId());
+		return retInstance;
 	}
 
 	public Instance upInstance(Long id) {

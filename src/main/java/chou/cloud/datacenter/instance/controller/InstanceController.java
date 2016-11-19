@@ -31,8 +31,7 @@ public class InstanceController {
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.CREATED)
 	Instance insertInstance(@Validated @RequestBody Instance instance) {
-		machineService.startCreatingInstance(instance);
-		return instanceService.save(instance);
+		return instanceService.createInstance(instance);
 	}
 
 	@RequestMapping(value = "{id}", method = RequestMethod.PUT)
