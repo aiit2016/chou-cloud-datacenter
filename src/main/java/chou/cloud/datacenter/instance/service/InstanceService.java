@@ -62,10 +62,11 @@ public class InstanceService {
 	public Instance createInstance(Instance instance) {
 		// create instance record
 		instance.setId(null);
+		instance.setStatus(Consts.INSTANCE_STATUS_INITIALIZING);
 		Instance retInstance = instanceRepository.save(instance);
 
-		// start instance
-		upInstance(retInstance.getId());
+		// create instance
+		virtualMachineService.create(instance);
 		return retInstance;
 	}
 
@@ -107,7 +108,8 @@ public class InstanceService {
 		for (int i = 0; i < size - 1; i++) {
 			instance.setId(null);
 			instance = instanceRepository.save(instance);
-			instance = upInstance(instance.getId());
+			//instance = upInstance(instance.getId());
+			instance = createInstance(instance);
 			instances.add(instance);
 		}
 

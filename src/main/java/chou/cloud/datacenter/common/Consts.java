@@ -11,6 +11,7 @@ public class Consts {
 	public static String INSTANCE_STATUS_INVALID = "Invalid";
 
 	// event type
+	public static String EVENT_TYPE_CREATEVM = "Create Virtual Machine";
 	public static String EVENT_TYPE_STARTVM = "Start Virtual Machine";
 	public static String EVENT_TYPE_STOPVM = "Stop Virtual Machine";
 	public static String EVENT_TYPE_STARTAS = "Start Auto Scaling";

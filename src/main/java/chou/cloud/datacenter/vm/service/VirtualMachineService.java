@@ -18,6 +18,14 @@ public class VirtualMachineService {
 	@Autowired
 	private EventBus r;
 
+	public void create(Instance instance) {
+		logger.debug("Fire event EVENT_TYPE_CREATEVM. (instance.name=" + instance.getName() + ")");
+
+		r.notify(Consts.EVENT_TYPE_CREATEVM, Event.wrap(instance));
+
+		logger.debug("Event fired.");
+	}
+
 	public void start(Instance instance) {
 		logger.debug("Fire event EVENT_TYPE_STARTVM. (instance.name=" + instance.getName() + ")");
 

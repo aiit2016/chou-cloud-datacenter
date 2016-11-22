@@ -27,8 +27,8 @@ public class VirtualMachineRealService {
 	@Autowired
 	MachineService machineService;
 
-	public void start(Instance instance) {
-		logger.debug("Deal with event EVENT_TYPE_STARTVM. (instance.name=" + instance.getName() + ")");
+	public void create(Instance instance) {
+		logger.debug("Deal with event EVENT_TYPE_CREATEVM. (instance.name=" + instance.getName() + ")");
 
 		Machine machine = machineService.getAvailableMachine(instance);
 		if (machine == null) {
@@ -36,12 +36,39 @@ public class VirtualMachineRealService {
 			instance.setDescription("No available resource!");
 			instanceRepository.save(instance);
 
-			logger.error("No available resource to start virtual machine!");
+			logger.error("No available resource to create virtual machine!");
 			return;
 		}
 
 		instance.setMachineId(machine.getId());
 		instanceRepository.save(instance);
+
+		// create VM
+		SshServerInfo ssi = new SshServerInfo();
+		ssi.setHostName(machine.getIpAddress());
+		CommandExecuter ce = new CommandExecuter(ssi);
+		List<String> commands = CommandBuilder.buildCreateVmCommands(instance);
+		boolean status = ce.exeCommands(commands);
+
+		// update status
+		if (!status) {
+			instance.setStatus(Consts.INSTANCE_STATUS_INVALID);
+			instance.setDescription("Failured to create virtual machine!");
+			instanceRepository.save(instance);
+
+			logger.error("Failured to create virtual machine!");
+		} else {
+			instance.setStatus(Consts.INSTANCE_STATUS_ACTIVED);
+			instanceRepository.save(instance);
+
+			logger.debug("Virtual machine is created.");
+		}
+	}
+
+	public void start(Instance instance) {
+		logger.debug("Deal with event EVENT_TYPE_STARTVM. (instance.name=" + instance.getName() + ")");
+
+		Machine machine = machineService.find(instance.getMachineId());
 
 		// start VM
 		SshServerInfo ssi = new SshServerInfo();

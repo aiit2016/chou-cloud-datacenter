@@ -29,8 +29,19 @@ public class EventConfiguration {
 
 	@PostConstruct
 	public void onStartUp() {
+		r.on($(Consts.EVENT_TYPE_CREATEVM), createVirtualMachine());
 		r.on($(Consts.EVENT_TYPE_STARTVM), startVirtualMachine());
 		r.on($(Consts.EVENT_TYPE_STOPVM), stopVirtualMachine());
+	}
+
+	private Consumer<Event<Instance>> createVirtualMachine() {
+//		return event -> virtualMachineRealService.create(event.getData());
+		return event -> executor.execute(new Runnable() {
+			@Override
+			public void run() {
+				virtualMachineRealService.create(event.getData());
+			}
+		});
 	}
 
 	private Consumer<Event<Instance>> startVirtualMachine() {
