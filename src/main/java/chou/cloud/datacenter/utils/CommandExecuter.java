@@ -25,10 +25,12 @@ public class CommandExecuter {
 			ssi = new SshServerInfo();
 		}
 		if (StringUtils.isEmpty(ssi.getUserName())) {
-			ssi.setUserName("admin");
+//			ssi.setUserName("admin");
+			ssi.setUserName("root");
 		}
 		if (StringUtils.isEmpty(ssi.getPassword())) {
-			ssi.setPassword("net03.password");
+//			ssi.setPassword("net03.password");
+			ssi.setPassword("net030password");
 		}
 		if (ssi.getPort() == null) {
 			ssi.setPort(22);
