@@ -91,6 +91,7 @@ public class CommandExecuter {
 				} catch (Exception ee) {
 				}
 			}
+			logger.debug("Command exit status:" + channel.getExitStatus());
 			status = channel.getExitStatus() == 0;
 			channel.disconnect();
 			session.disconnect();
