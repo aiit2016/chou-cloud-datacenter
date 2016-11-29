@@ -9,11 +9,9 @@ public class CommandBuilder {
 
 	private static String createVmCommand = "python /usr/local/bin/createvm.py %s %d %d ";
 
-//	private static String startVmCommand = "python /usr/local/bin/startvm.py %s ";
-	private static String startVmCommand = "virsh start %s ";
+	private static String startVmCommand = "python /usr/local/bin/startvm.py %s ";
 
-//	private static String stopVmCommand = "python /usr/local/bin/stopvm.py %s ";
-	private static String stopVmCommand = "virsh destroy %s ";
+	private static String stopVmCommand = "python /usr/local/bin/stopvm.py %s ";
 
 	public static List<String> buildCreateVmCommands(Instance instance) {
 		List<String> commands = new ArrayList<String>();
